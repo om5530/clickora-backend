@@ -1,9 +1,19 @@
 import cors from "cors";
 import express, { NextFunction, Request, Response } from "express";
 import morgan from "morgan";
+import fs from "fs";
+import YAML from "yaml";
 import { sequelize } from "./datasource";
+const swaggerUi = require('swagger-ui-express');
 
 export const app = express();
+
+const swaggerFile = fs.readFileSync('./src/public/swagger/swagger.yaml', 'utf8');
+const swaggerDocument = YAML.parse(swaggerFile);
+
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
+// Serve static Swagger UI files if needed
+app.use('/swagger', express.static('./src/public/swagger'));
 
 sequelize
   .authenticate()
@@ -15,7 +25,7 @@ sequelize
     process.exit(1);
   });
 
-const corsOrigin = [process.env.FRONTEND_DOMAIN, process.env.BACKEND_DOMAIN];
+const corsOrigin = process.env.FRONTEND_DOMAIN || process.env.BACKEND_DOMAIN;
 
 const corsOptions = {
   origin: corsOrigin,
@@ -39,7 +49,7 @@ app.use(
 );
 
 app.get("/syncDB", async (req: Request, res: Response) => {
-  if (["development"].includes(process.env.NODE_ENV)) {
+  if (["development"].includes(process.env.NODE_ENV ?? "development")) {
     await sequelize.sync({ alter: true });
     res.send("Database synced");
   } else {

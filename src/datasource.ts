@@ -1,10 +1,23 @@
 import { Sequelize, Op } from "@sequelize/core";
 import { PostgresDialect } from "@sequelize/postgres";
 import dotenv from 'dotenv';
+import { User } from "./models/user";
+import { Product } from "./models/product";
+import { ProductImage } from "./models/product-image";
+import { Order } from "./models/order";
+import { OrderItem } from "./models/order-item";
+import { Cart } from "./models/cart";
 
 dotenv.config();
 
-const models = []; // add your model references here
+const models = {
+  User,
+  Product,
+  ProductImage,
+  Order,
+  OrderItem,
+  Cart
+};
 
 const sequelize = new Sequelize({
   dialect: PostgresDialect,
