@@ -1,0 +1,138 @@
+openapi: 3.0.4
+info:
+  title: ClickOra - OpenAPI 3.0
+  contact:
+    email: omkarbacha25@gmail.com
+  version: 1.0.12
+tags:
+  - name: user
+  - name: product
+  - name: cart
+  - name: order
+
+
+paths:
+  #Auth
+  /auth/login:
+    post:
+      tags:
+        - user
+      summary: Login a user
+      operationId: loginUser
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/User'
+      responses:
+        '200':
+          description: Successful login
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        '400':
+          description: Bad Request
+
+components:
+  schemas:
+    User:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        username:
+          type: string
+        salutation:
+          type: string
+          enum:
+            - MR
+            - MRS
+            - MS
+            - MISS
+            - DR
+            - PROF
+            - ENGR
+            - MX
+            - NONE
+        firstName:
+          type: string
+        lastName:
+          type: string
+        email:
+          type: string
+          format: email
+        countryCode:
+          type: string
+        phone:
+          type: string
+        status:
+          type: string
+          enum:
+            - ACTIVE
+            - INACTIVE
+            - INVITED
+        password:
+          type: string
+          format: password
+        LastLogin:
+          type: string
+          format: date-time
+        rememberMe:
+          type: boolean
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+
+    Product:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        name:
+          type: string
+        shortCode:
+          type: string
+        description:
+          type: string
+        price:
+          type: number
+        stock:
+          type: integer
+          format: int32
+        brand:
+          type: string
+        category:
+          type: string
+        tags:
+          type: array
+          items:
+            type: string
+        rating:
+          type: number
+          format: float
+        soldCount:
+          type: integer
+          format: int32
+        isActive:
+          type: boolean
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+            
+    LoginResponse:
+      title: LoginResponse
+      properties:
+        user:
+          $ref: '#/components/schemas/User'
+        token:
+          type: string
