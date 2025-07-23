@@ -26,6 +26,7 @@ const sequelize = new Sequelize({
   password: process.env.PG_PASS,
   host: process.env.PG_HOST,
   port: Number(process.env.PG_PORT),
+  models: Object.values(models),
   ssl: process.env.PG_SSL === 'true' ? { rejectUnauthorized: false } : false,
   clientMinMessages: 'notice',
 });

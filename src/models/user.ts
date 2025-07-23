@@ -42,7 +42,7 @@ export class User extends Model<InferAttributes<User>, InferCreationAttributes<U
 
   @Attribute(DataTypes.STRING)
   @NotNull
-  declare Salutation: Salutation;
+  declare salutation: Salutation;
 
   @Attribute(DataTypes.STRING)
   @NotNull
@@ -66,11 +66,9 @@ export class User extends Model<InferAttributes<User>, InferCreationAttributes<U
   declare status: UserStatus
 
   @Attribute(DataTypes.STRING)
-  @NotNull
   declare password: string;
 
   @Attribute(DataTypes.DATE)
-  @NotNull
   declare LastLogin: Date;
 
   @Attribute(DataTypes.BOOLEAN)

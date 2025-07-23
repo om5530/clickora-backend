@@ -5,18 +5,27 @@ info:
     email: omkarbacha25@gmail.com
   version: 1.0.12
 tags:
+  - name: auth
+    description: Authentication operations
   - name: user
   - name: product
   - name: cart
   - name: order
 
+servers:
+  - url: http://localhost:3000
+    description: Development server
+    variables:
+      port:
+        default: "3000"
+        description: Port number for the development server
 
 paths:
   #Auth
   /auth/login:
     post:
       tags:
-        - user
+        - auth
       summary: Login a user
       operationId: loginUser
       requestBody:
@@ -34,6 +43,31 @@ paths:
                 $ref: '#/components/schemas/User'
         '400':
           description: Bad Request
+  /auth/register:
+    post:
+      tags:
+        - auth
+      summary: Register a new user
+      operationId: registerUser
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/User'
+      responses:
+        '201':
+          description: User registered successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
 
 components:
   schemas:
@@ -136,3 +170,15 @@ components:
           $ref: '#/components/schemas/User'
         token:
           type: string
+
+    ErrorResponse:
+      type: object
+      properties:
+        message:
+          type: string
+
+  securitySchemes:
+    Token:
+      type: apiKey
+      in: header
+      name: Token

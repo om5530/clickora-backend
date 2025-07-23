@@ -5,6 +5,7 @@ import fs from "fs";
 import YAML from "yaml";
 import { sequelize } from "./datasource";
 const swaggerUi = require('swagger-ui-express');
+import authRouter from "./routes/auth";
 
 export const app = express();
 
@@ -14,6 +15,7 @@ const swaggerDocument = YAML.parse(swaggerFile);
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 // Serve static Swagger UI files if needed
 app.use('/swagger', express.static('./src/public/swagger'));
+
 
 sequelize
   .authenticate()
@@ -36,7 +38,9 @@ const corsOptions = {
 
 app.use(cors(corsOptions));
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
+app.use('/auth', authRouter);
 app.use(
   morgan(":method :url :status :response-time ms - :res[content-length]", {
     skip: (req: Request) => {
